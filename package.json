@@ -1,5 +1,5 @@
 {
-  "name": "feedback-app",
+  "name": "server",
   "version": "1.0.0",
   "main": "index.js",
   "engines": {
@@ -7,12 +7,16 @@
     "yarn": "1.16.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.4",
     "passport": "^0.4.0",
     "passport-google-oauth20": "2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0"
   }
 }

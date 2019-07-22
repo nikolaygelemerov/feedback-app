@@ -27,7 +27,7 @@ passport.use(
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
       callbackURL: '/auth/google/callback',
-      proxy: true // alow heroku proxy access our heroku server
+      proxy: true // allow heroku proxy access our heroku server
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -35,12 +35,12 @@ passport.use(
         const existingUser = await User.findOne({ googleId: profile.id });
 
         if (existingUser) {
-          done(null, existingUser); // we finished here, no error callback(null is passed)
-        } else {
-          const user = await new User({ googleId: profile.id }).save(); // ninitial new User model instance
-
-          done(null, user); // model instance retrived from Db, same as new User but another instance
+          return done(null, existingUser); // we finished here, no error callback(null is passed)
         }
+
+        const user = await new User({ googleId: profile.id }).save(); // initial new User model instance
+
+        done(null, user); // model instance retrived from Db, same as new User but another instance
       } catch (error) {
         console.error(error);
       }

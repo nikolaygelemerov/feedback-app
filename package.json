@@ -8,7 +8,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "license": "MIT",
   "dependencies": {
@@ -19,6 +21,7 @@
     "passport-google-oauth20": "2"
   },
   "devDependencies": {
+    "concurrently": "^4.1.0",
     "nodemon": "^1.19.0"
   }
 }

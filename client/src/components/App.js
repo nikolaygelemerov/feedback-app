@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 
 import * as actions from '../actions';
 import Header from './Header';
+import Landing from './Landing';
 
 const Dashboard = () => <h2>Dashboard</h2>;
 const SuerveyNew = () => <h2>SuerveyNew</h2>;
-const Landing = () => <h2>Landing</h2>;
 
 class App extends PureComponent {
   render() {
@@ -17,7 +17,7 @@ class App extends PureComponent {
           <Header />
           <Switch>
             <Route exact path="/" component={Landing} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/surveys" component={Dashboard} />
           </Switch>
         </BrowserRouter>
       </div>

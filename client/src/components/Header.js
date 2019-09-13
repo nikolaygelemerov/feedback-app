@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Payments from './Payments';
 
 class Header extends PureComponent {
   renderContent() {
@@ -16,11 +17,14 @@ class Header extends PureComponent {
           </li>
         );
       default:
-        return (
-          <li>
+        return [
+          <li key="0">
+            <Payments />
+          </li>,
+          <li key="2">
             <a href="/api/logout">Logout</a>
           </li>
-        );
+        ];
     }
   }
 
@@ -30,11 +34,7 @@ class Header extends PureComponent {
     return (
       <nav>
         <div className="nav-wrapper">
-          <Link
-            to={auth ? '/surveys' : '/'}
-            className="left brand-logo"
-            href="#"
-          >
+          <Link to={auth ? '/surveys' : '/'} className="left brand-logo">
             Emaily
           </Link>
           <ul className="right">{this.renderContent()}</ul>

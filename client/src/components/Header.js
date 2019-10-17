@@ -21,7 +21,10 @@ class Header extends PureComponent {
           <li key="0">
             <Payments />
           </li>,
-          <li key="2">
+          <li key="2" style={{ margin: '0 10px' }}>
+            Credits: {auth.credits}
+          </li>,
+          <li key="3">
             <a href="/api/logout">Logout</a>
           </li>
         ];

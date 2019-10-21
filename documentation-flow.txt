@@ -1,0 +1,27 @@
+* WHY SERVER1 (create-react-app dev server with proxy that targets the serve2 domain) AND SERVER2 ARCHITECTURE
+
+- Browser adds cookies when requesting to same domain (localhost:3000 to localhost:3000).
+So what happens is that when we want to access something from create-react-app running on localhost:3000, we basically request the same domain, but the proxy targets the localhost:5000 and so
+the cookies will be passed to our server which is running on localhost:5000. 
+In production we dont have this Cross Domain issue because the request are always passed to the domain where the application is deployed.
+No CORS(cross origin recource sharing) issue.
+
+- Browser doesnt add cookies(security policy) when requesting to different domain (localhost:3000 to localhost:5000).
+CORS issue. It is possible to enable the server to allow the CORS request.
+
+* OAUTH FLOW WITH PROXY (DEVELOPMENT)
+
+1. User opens create-react-app on localhost:3000. Sees a link with href '/auth/google'. The browser treats that as a relative path and prepends 'localhost:3000' domain.
+So we have 'localhost:3000/auth/google'.
+2. When the request comes in 'localhost:3000/auth/google', the proxy from client configuration sees the defined relative path and target. 
+At this point the request is in pending mode, being handled by the proxy. Proxy copies the request and sends it to the new route defined in the proxy configuration.
+3. The server running on 'localhost:5000'(express server) receives the request and sees that the user is trying to get into the oauth flow. So passes to google.com and on
+return passes to '/auth/google/callback' (callback url specified in passport.js, callbackUrl). The response from callbackUrl is passed to the proxy.
+4. The proxy gets the response, handles the pending request in the browser and navigates to  google. Then google redirects to '/auth/google/callback'. So it sends the user
+back to 'localhost:3000/auth/google/callback'(Authorized redirect URIs).
+5. Google sends to 'localhost:3000/auth/google/callback?code=123343' (code is attached).
+6. Proxy handles the request from google and takes the control. Copies the request from google ('localhost:3000/auth/google/callback?code=123343') and sends the request to express server.
+7. The express server gets the details from the code query param, validates the login and sends back to the proxy with a cookie.
+8. Finally the prending request is resolved by the proxy and sends does a redirect to '/' so 'localhost:3000'.
+
+

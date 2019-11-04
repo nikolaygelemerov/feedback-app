@@ -9,8 +9,6 @@ class Header extends PureComponent {
 
     switch (auth) {
       case null:
-        return;
-      case false:
         return (
           <li>
             <a href="/auth/google">Login with google</a>

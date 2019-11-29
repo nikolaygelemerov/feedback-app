@@ -11,7 +11,7 @@ module.exports = app => {
   // req, res handler is executed.
   // Pass the middleware handlers in the order we want them
   // to be executed.
-  app.post('/api/surveys', requireLogin, requireCredits, (req, res) => {
+  app.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
     const { title, subject, body, recipients } = req.body;
 
     const survey = new Survey({
@@ -25,5 +25,22 @@ module.exports = app => {
 
     // Build a mailer that has to be sent.
     const mailer = new Mailer(survey, surveyTemplate(survey));
+
+    try {
+      // Await mailer complete sending.
+      await mailer.send();
+
+      // Save survey in db.
+      await survey.save();
+
+      // Decrement user credits by one.
+      req.user.credits -= 1;
+      // Get updated user from db.
+      const user = await req.user.save();
+
+      res.send(user);
+    } catch (error) {
+      res.status(422).send(error);
+    }
   });
 };

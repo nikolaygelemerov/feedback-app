@@ -7,6 +7,10 @@ const surveyTemplate = require('../services/email-templates/surveyTemplate');
 const Survey = mongoose.model('surveys');
 
 module.exports = app => {
+  app.get('/api/surveys/thanks', (req, res) => {
+    res.send('Thanks for voting!');
+  });
+
   // We can pass endles number of middleware functions before
   // req, res handler is executed.
   // Pass the middleware handlers in the order we want them

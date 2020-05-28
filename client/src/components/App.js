@@ -1,41 +1,33 @@
-import React, { PureComponent } from 'react';
+import React, { memo, useEffect } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import * as actions from '../actions';
+import { fetchUser } from '../actions';
+
 import Header from './Header';
 import Landing from './Landing';
+import Dashboard from './Dashboard';
+import SuerveyNew from './surveys/SurveyNew';
 
-const Dashboard = () => <h2>Dashboard</h2>;
-const SuerveyNew = () => <h2>SuerveyNew</h2>;
+const App = () => {
+  const dispatch = useDispatch();
 
-class App extends PureComponent {
-  render() {
-    return (
-      <div className="container">
-        <BrowserRouter>
-          <Header />
-          <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/surveys" component={Dashboard} />
-          </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
 
-  componentDidMount() {
-    const { fetchUser } = this.props;
-
-    fetchUser();
-  }
-}
-
-const mapDispatch = {
-  fetchUser: actions.fetchUser
+  return (
+    <div className="container">
+      <BrowserRouter>
+        <Header />
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/surveys" component={Dashboard} />
+          <Route exact path="/surveys/new" component={SuerveyNew} />
+        </Switch>
+      </BrowserRouter>
+    </div>
+  );
 };
 
-export default connect(
-  null,
-  mapDispatch
-)(App);
+export default memo(App);

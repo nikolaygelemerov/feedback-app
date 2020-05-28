@@ -1,12 +1,12 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
+import React, { memo, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Payments from './Payments';
 
-class Header extends PureComponent {
-  renderContent() {
-    const { auth } = this.props;
+const Header = () => {
+  const { auth } = useSelector((state) => ({ auth: state.auth }));
 
+  const renderContent = useCallback(() => {
     switch (auth) {
       case null:
         return (
@@ -24,32 +24,21 @@ class Header extends PureComponent {
           </li>,
           <li key="3">
             <a href="/api/logout">Logout</a>
-          </li>
+          </li>,
         ];
     }
-  }
+  }, [auth]);
 
-  render() {
-    const { auth } = this.props;
+  return (
+    <nav>
+      <div className="nav-wrapper">
+        <Link to={auth ? '/surveys' : '/'} className="left brand-logo">
+          Emaily
+        </Link>
+        <ul className="right">{renderContent()}</ul>
+      </div>
+    </nav>
+  );
+};
 
-    return (
-      <nav>
-        <div className="nav-wrapper">
-          <Link to={auth ? '/surveys' : '/'} className="left brand-logo">
-            Emaily
-          </Link>
-          <ul className="right">{this.renderContent()}</ul>
-        </div>
-      </nav>
-    );
-  }
-}
-
-const mapState = ({ auth }) => ({
-  auth
-});
-
-export default connect(
-  mapState,
-  null
-)(Header);
+export default memo(Header);
